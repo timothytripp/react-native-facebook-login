@@ -1,5 +1,6 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <FBSDKCoreKit/FBSDKProfile.h>
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
 #import "RCTLog.h"
@@ -180,7 +181,10 @@ RCT_EXPORT_METHOD(loginWithPermissions:(NSArray *)permissions callback:(RCTRespo
       NSDictionary *loginData = @{
         @"credentials": [self buildCredentials],
         @"missingPermissions": missingPermissions,
-        @"declinedPermissions": decliendPermissions
+        @"declinedPermissions": decliendPermissions,
+        @"firstName": [[FBSDKProfile currentProfile] firstName],
+        @"lastName": [[FBSDKProfile currentProfile] lastName],
+        @"name": [[FBSDKProfile currentProfile] name]
       };
 
       [self fireEvent:@"Login" withData:loginData];
@@ -209,7 +213,10 @@ RCT_EXPORT_METHOD(getCredentials:(RCTResponseSenderBlock)callback) {
 
   if(credentials) {
     NSDictionary *loginData = @{
-      @"credentials": credentials
+      @"credentials": credentials,
+      @"firstName": [[FBSDKProfile currentProfile] firstName],
+      @"lastName": [[FBSDKProfile currentProfile] lastName],
+      @"name": [[FBSDKProfile currentProfile] name]
     };
 
     [self fireEvent:@"LoginFound" withData:loginData];
